@@ -14,7 +14,8 @@ Basic useful features:
 
 <!-- (DELETE) Delete an existing blog post -->
 
-(GET) Get the filtered list of posts (filter by title)
+<!-- (GET) Get the filtered list of posts (filter by title) -->
+
 Note: Admin should be able to delete any blog post, whereas normal users can delete only the blog posts created by them.
 
 Technical Guidelines

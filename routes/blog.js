@@ -85,16 +85,23 @@ router.post('/update',requiredLogin,(req,res)=>{
 })
 
 // (DELETE) Delete an existing blog post
-router.post('/delete',requiredLogin,(req,res)=>{
-    const {author,_id} = req.body
-    const authenticatedUser = {_id:req.user._id,name:req.user.name}
-    if(JSON.stringify(authenticatedUser)!=JSON.stringify(author) && !req.user.isAdmin){
-        return res.status(422).json({err:"You are not the author of this blog nor you are a Admin"})
-    }
-    Blog.deleteOne({_id}).then((post)=>{
-        res.json({message:"Successfully Deleted"})
-    }).catch((err)=>{
-        console.log(err);
+router.delete('/delete/:id',requiredLogin,(req,res)=>{
+    Blog.findOne({_id:req.params.id})
+    .populate("author","_id")
+    .exec((err,post)=>{
+        if(err || !post){
+            return res.status(404).json({error:"No such post exist"})
+        }
+        if(post.author._id.toString()=== req.user._id.toString() || req.user.isAdmin){
+            post.remove()
+            .then(result=>{
+                res.json({message:"Successfully Deleted"})
+            }).catch(err=>{
+                console.log(err);
+            })
+        } else{
+            res.status(422).json({err:"You are not the author of this blog nor you are a Admin"})
+        }
     })
 })
 
