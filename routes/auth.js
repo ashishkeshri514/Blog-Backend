@@ -7,7 +7,7 @@ const jwt  = require('jsonwebtoken')
 const {JWT_SECRET} = require('../keys')
 const requiredLogin = require('../middleware/requiredLogin')
 
-
+//Signup
 router.post('/signup',(req,res)=>{
     const {name,email,password} = req.body;
     if(!email || !password || !name) {
@@ -41,6 +41,7 @@ router.post('/signup',(req,res)=>{
     })
 })
 
+//Admin/User Login
 router.post('/signin',(req,res)=>{
     const {email,password} = req.body
     if(!email || !password) {

@@ -106,9 +106,8 @@ router.delete('/delete/:id',requiredLogin,(req,res)=>{
 })
 
 // (GET) Get the filtered list of posts (filter by title)
-router.post('/search',requiredLogin,(req,res)=>{
-    const {searchtext} = req.body
-    Blog.find( { $text: { $search: searchtext } } )
+router.get('/search/:searchtext',requiredLogin,(req,res)=>{
+    Blog.find( { $text: { $search: req.params.searchtext } } )
     .populate("author","_id name")
     .then(searchedblog=>{
         res.json({searchedblog})
