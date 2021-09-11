@@ -142,3 +142,5 @@ Blog APIs:
    Header:
    Content-Type: application/json
 ```
+
+## If you are Loggedin as the admin (email: admin@admin.admin, password: admin) you can delete any post
