@@ -68,6 +68,7 @@ Generate a auth token by Signin (For getting admin token signin use {email:"admi
 
 Authorization APIs:
 
+```
 1.  route: /signup
     body:
     {
@@ -142,3 +143,4 @@ Blog APIs:
    body: No parameter required
    Header:
    Content-Type: application/json
+```
