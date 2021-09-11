@@ -30,6 +30,33 @@ const requiredLogin = require('../middleware/requiredLogin')
  * @swagger
  * components:
  *  schemas:
+ *      Update-Blog:
+ *          type: object
+ *          required :
+ *              -title
+ *              -content
+ *              -_id
+ *          properties:
+ *              title:
+ *                  type: string
+ *                  description: Updated blog title
+ *              content:
+ *                  type: string
+ *                  description: Updated Content of blog
+ *              _id:
+ *                  type: string
+ *                  description: Id of the blog
+ *          example:
+ *              title: the new blog
+ *              content: hi there you are awesome
+ *              _id: 613c73027f422990da815dbf
+ *  
+ */
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
  *      Blog:
  *          type: object
  *          required :
@@ -213,23 +240,85 @@ router.get('/thatblog/:id',(req,res)=>{
     })
 })
 
+
+/**
+ * @swagger
+ * /update:
+ *  post:
+ *      summary: Update Blog API
+ *      tags: [Blogs]
+ *      security:
+ *          - jwt: []
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Update-Blog'
+ *      responses:
+ *          200:
+ *              description: Signup Successfull
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
+
 // (PUT) Update an existing blog post
 router.post('/update',requiredLogin,(req,res)=>{
-    const {title,content,author,_id} = req.body
-    const authenticatedUser = {_id:req.user._id,name:req.user.name}
-    if(JSON.stringify(authenticatedUser)!=JSON.stringify(author)){
-        return res.status(422).json({err:"You are not the author of this blog"})
-    }
-    if(!title || !content){
-        return res.status(422).json({err:"Please add all the fields"})
-    }
-    Blog.update({_id},{$set:{title,content}}).then((post)=>{
-        res.json({message:"Successfully Updated"})
-    }).catch((err)=>{
-        console.log(err);
+    const {title,content,_id} = req.body
+    Blog.findOne({_id})
+    .populate("author","_id")
+    .exec((err,post)=>{
+        if(err || !post){
+            return res.status(404).json({error:"No such post exist"})
+        }
+        if(!title || !content){
+            return res.status(422).json({err:"Please add all the fields"})
+        }
+        if(post.author._id.toString()=== req.user._id.toString()){
+            Blog.update({_id},{$set:{title,content}})
+            .then((post)=>{
+                    res.json({message:"Successfully Updated"})
+                })
+            .catch(err=>{
+                console.log(err);
+            })
+        } else{
+            res.status(422).json({err:"You are not the author of this blog"})
+        }
     })
 
 })
+
+
+/**
+ * @swagger
+ * /delete/{id}:
+ *  delete:
+ *      summary: Delete by ID of Blog
+ *      tags: [Blogs]
+ *      security:
+ *          - jwt: []
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: The blog id
+ *      responses:
+ *          200:
+ *              description: Deleted Successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
 
 // (DELETE) Delete an existing blog post
 router.delete('/delete/:id',requiredLogin,(req,res)=>{
