@@ -69,7 +69,7 @@ const swaggerSpec = swaggerJsDoc({
      components: {
         securitySchemes: {
           jwt: {
-            type: 'http',
+            type: 'apiKey',
             scheme: 'Bearer',
             in: 'header',
             bearerFormat: 'JWT',

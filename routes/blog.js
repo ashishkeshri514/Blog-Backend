@@ -8,6 +8,28 @@ const requiredLogin = require('../middleware/requiredLogin')
  * @swagger
  * components:
  *  schemas:
+ *      Create-Blog:
+ *          type: object
+ *          required :
+ *              -title
+ *              -content
+ *          properties:
+ *              title:
+ *                  type: string
+ *                  description: The blog title
+ *              content:
+ *                  type: string
+ *                  description: Content of blog
+ *          example:
+ *              title: the new blog
+ *              content: hi there you are awesome
+ *  
+ */ 
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
  *      Blog:
  *          type: object
  *          required :
@@ -38,15 +60,25 @@ const requiredLogin = require('../middleware/requiredLogin')
  */
 
 
+
+
 /**
  * @swagger
- * /allblog:
- *  get:
- *      summary: Return list of blogs
+ * /createblog:
+ *  post:
+ *      summary: Create Blog API
  *      tags: [Blogs]
+ *      security:
+ *          - jwt: []
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Create-Blog'
  *      responses:
  *          200:
- *              description: The list of all blogs
+ *              description: Signup Successfull
  *              content:
  *                  application/json:
  *                      schema:
@@ -77,6 +109,24 @@ router.post('/createblog',requiredLogin,(req,res)=>{
         console.log(err)
     })
 })
+
+/**
+ * @swagger
+ * /allblog:
+ *  get:
+ *      summary: Return list of blogs
+ *      tags: [Blogs]
+ *      responses:
+ *          200:
+ *              description: The list of all blogs
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
+
 
 // (GET) GET All blog posts (only the titles and author)
 router.get('/allblog',(req,res)=>{
@@ -127,15 +177,39 @@ router.get('/myblog',requiredLogin,(req,res)=>{
     })
 })
 
+/**
+ * @swagger
+ * /thatblog/{id}:
+ *  get:
+ *      summary: Search by ID
+ *      tags: [Blogs]
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: The book id
+ *      responses:
+ *          200:
+ *              description: The list of all blogs
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
+
 // (GET) GET details of the single blog post (title + author + content)
 router.get('/thatblog/:id',(req,res)=>{
     Blog.findOne({_id:req.params.id})
     .populate("author","_id name")
-    .then(blog=>{
-        res.json({blog})
-    })
-    .catch(err=>{
-        console.log(err);
+    .exec((err,post)=>{
+        if(err || !post){
+            return res.status(404).json({error:"No such post exist"})
+        }
+        res.json({post})
     })
 })
 
@@ -178,8 +252,33 @@ router.delete('/delete/:id',requiredLogin,(req,res)=>{
     })
 })
 
+/**
+ * @swagger
+ * /search/{searchtext}:
+ *  get:
+ *      summary: Search by title
+ *      tags: [Blogs]
+ *      parameters:
+ *          -   in: path
+ *              name: searchtext
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: The book id
+ *      responses:
+ *          200:
+ *              description: The list of all blogs
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
+
+
 // (GET) Get the filtered list of posts (filter by title)
-router.get('/search/:searchtext',requiredLogin,(req,res)=>{
+router.get('/search/:searchtext',(req,res)=>{
     Blog.find( { $text: { $search: req.params.searchtext } } )
     .populate("author","_id name")
     .then(searchedblog=>{

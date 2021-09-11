@@ -6,9 +6,84 @@ const bcrypt = require('bcryptjs')
 const jwt  = require('jsonwebtoken')
 const {JWT_SECRET} = require('../keys')
 const requiredLogin = require('../middleware/requiredLogin')
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Auth:
+ *          type: object
+ *          required :
+ *              -name
+ *              -email
+ *              -password
+ *          properties:
+ *              name:
+ *                  type: string
+ *                  description: Name of User
+ *              email:
+ *                  type: string
+ *                  description: Email of User
+ *              password:
+ *                  type: string
+ *                  description: password
+ *          example:
+ *              name: Ashish
+ *              email: ashish@gmail.com
+ *              password: "123456"
+ *  
+ */ 
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Auth-Signin:
+ *          type: object
+ *          required :
+ *              -email
+ *              -password
+ *          properties:
+ *              email:
+ *                  type: string
+ *                  description: Email of User
+ *              password:
+ *                  type: string
+ *                  description: password
+ *          example:
+ *              email: ashish@gmail.com
+ *              password: "123456"
+ *  
+ */ 
+/**
+ * @swagger
+ * tags:
+ *  name: Auth
+ *  description: The Auth APIS 
+ */
+
+/**
+ * @swagger
+ * /signup:
+ *  post:
+ *      summary: Signup API
+ *      tags: [Auth]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Auth'
+ *      responses:
+ *          200:
+ *              description: Signup Successfull
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Auth' 
+ */
 router.post('/signup',(req,res)=>{
-    console.log(req.body)
     const {name,email,password} = req.body;
     if(!email || !password || !name) {
         return res.status(422).json({error:"please add all the fields"})
@@ -42,7 +117,28 @@ router.post('/signup',(req,res)=>{
 })
 
 
-
+/**
+ * @swagger
+ * /signin:
+ *  post:
+ *      summary: Signin API
+ *      tags: [Auth]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Auth-Signin'
+ *      responses:
+ *          200:
+ *              description: Signup Successfull
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Auth-Signin' 
+ */
 
 router.post('/signin',(req,res)=>{
     const {email,password} = req.body
