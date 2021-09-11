@@ -51,9 +51,9 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
     $ nodemon app or node app
 
-#### How to test APIS
+## How to test APIS
 
-## Open http://localhost:5000/docs in browser
+## Open http://localhost:5000/docs or https://blogpost514.herokuapp.com/docs in browser
 
 You can use the Swagger Frontend for testing the routes that are not protected (/signup, /signin, /allblog, /search/:searchtext, /thatblog/:\_id )
 
