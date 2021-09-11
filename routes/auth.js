@@ -31,6 +31,22 @@ const requiredLogin = require('../middleware/requiredLogin')
  *              email: ashish@gmail.com
  *              password: "123456"
  *  
+ */
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Auth-Response:
+ *          type: string
+ *          required :
+ *              -message
+ *          properties:
+ *              message:
+ *                  type: string
+ *                  description: Sucessfull
+ *          example:
+ *              message: "saved successfully" 
+ *  
  */ 
 
 /**
@@ -81,7 +97,7 @@ const requiredLogin = require('../middleware/requiredLogin')
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Auth' 
+ *                              $ref: '#/components/schemas/Auth-Response' 
  */
 router.post('/signup',(req,res)=>{
     const {name,email,password} = req.body;
