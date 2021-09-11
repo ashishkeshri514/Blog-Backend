@@ -19,39 +19,6 @@ mongoose.connection.on('error',(err)=>{
 })
 
 
-// const options = {
-//     definition: {
-//       openapi: '3.0.0',
-//       info: {
-//         title: 'BlogPost API',
-//         version: '1.0.0',
-//         description:'A simple express BlogPost API'
-//       },
-//       servers:[{
-//                     url: "http://localhost:5000"
-//                 },{
-//                     url:"https://blogpost514.herokuapp.com/"
-//                 }],
-//     },
-//     components: {
-//         securitySchemes: {
-//           jwt: {
-//             type: "http",
-//             scheme: "bearer",
-//             in: "header",
-//             bearerFormat: "JWT"
-//           },
-//         }
-//       }
-//       ,
-//       security: [{
-//         jwt: []
-//       }],
-//     apis: ['./routes/*.js'], // files containing annotations as above
-//   };
-// const specs = swaggerJsDoc(options);
-// app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(specs))
-
 const swaggerSpec = swaggerJsDoc({
     definition: {
               openapi: '3.0.0',
