@@ -60,10 +60,11 @@ const swaggerSpec = swaggerJsDoc({
                 version: '1.0.0',
                 description:'A simple express BlogPost API'
               },
-              servers:[{
+              servers:[
+                {
+                    url:"https://blogpost514.herokuapp.com/"
+                },{
                             url: "http://localhost:5000"
-                        },{
-                            url:"https://blogpost514.herokuapp.com/"
                         }],
             },
      components: {
