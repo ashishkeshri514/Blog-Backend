@@ -75,9 +75,7 @@ Authorization APIs:
     "name": "name",
     "email": "email",
     "password": "password"
-
-            }
-
+    }
     Header:
     Content-Type: application/json
 
