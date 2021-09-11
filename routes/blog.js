@@ -4,6 +4,58 @@ const mongoose = require('mongoose')
 const Blog = mongoose.model("Blog")
 const requiredLogin = require('../middleware/requiredLogin')
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Blog:
+ *          type: object
+ *          required :
+ *              -title
+ *              -author
+ *          properties:
+ *              id:
+ *                  type: string
+ *                  description: The auto generated id of the blog
+ *              title:
+ *                  type: string
+ *                  description: The book title
+ *              author:
+ *                  type: string
+ *                  description: The author of blog
+ *          example:
+ *              id: 13894738372834
+ *              title: the new blog
+ *              author: Ashish Keshri
+ *  
+ */ 
+
+/**
+ * @swagger
+ * tags:
+ *  name: Blogs
+ *  description: The Blogs APIS 
+ */
+
+
+/**
+ * @swagger
+ * /allblog:
+ *  get:
+ *      summary: Return list of blogs
+ *      tags: [Blogs]
+ *      responses:
+ *          200:
+ *              description: The list of all blogs
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
+
+
 // (POST) Create a new blog post
 router.post('/createblog',requiredLogin,(req,res)=>{
     const {title,content} = req.body
@@ -41,6 +93,27 @@ router.get('/allblog',(req,res)=>{
         console.log(err);
     })
 })
+
+
+/**
+ * @swagger
+ * /myblog:
+ *  get:
+ *      summary: Return list of blogs by current user
+ *      tags: [Blogs]
+ *      security:
+ *          - jwt: []
+ *      responses:
+ *          200:
+ *              description: The list of all blogs
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Blog' 
+ */
+
 
 // (GET) GET All blog posts of current user(Just for testing)
 router.get('/myblog',requiredLogin,(req,res)=>{
